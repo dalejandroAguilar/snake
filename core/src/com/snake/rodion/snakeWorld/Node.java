@@ -43,9 +43,27 @@ public class Node {
         setY(y + node.getY());
     }
 
+    public void decrease(Node node) {
+        setX(x - node.getX());
+        setY(y - node.getY());
+    }
+
     public boolean isEqual(Node node) {
         if (this.x == node.getX() && this.y == node.getY())
             return true;
         return false;
     }
+
+    public boolean isEqualX(Node node) {
+        if (this.x == node.getX())
+            return true;
+        return false;
+    }
+
+    public boolean isEqualY(Node node) {
+        if (this.y == node.getY())
+            return true;
+        return false;
+    }
+
 }
