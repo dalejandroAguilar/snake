@@ -39,7 +39,26 @@ public class Snake {
     }
 
     public void setDirection(Direction direction) {
-        this.direction = direction;
+        Node dummyHead = new Node();
+        Node displacement = new Node();
+        switch (direction) {
+            case UP:
+                displacement.setPosition(0, 1);
+                break;
+            case DOWN:
+                displacement.setPosition(0, -1);
+                break;
+            case LEFT:
+                displacement.setPosition(-1, 0);
+                break;
+            case RIGHT:
+                displacement.setPosition(1, 0);
+                break;
+        }
+        dummyHead.setPosition(getHead());
+        dummyHead.increase(displacement);
+        if (thereIsNoSnake(dummyHead))
+            this.direction = direction;
     }
 
     public Node getHead() {
@@ -153,8 +172,4 @@ public class Snake {
             return false;
         return true;
     }
-
-
-
-
 }
