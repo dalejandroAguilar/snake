@@ -172,4 +172,12 @@ public class Snake {
             return false;
         return true;
     }
+
+    public boolean isVitals() {
+        return vitals;
+    }
+
+    public void setVitals(boolean vitals) {
+        this.vitals = vitals;
+    }
 }
