@@ -57,12 +57,16 @@ public class Snake {
         }
         dummyHead.setPosition(getHead());
         dummyHead.increase(displacement);
-        if (thereIsNoSnake(dummyHead))
+        if (!dummyHead.isEqual(getNeck()))
             this.direction = direction;
     }
 
     public Node getHead() {
         return body.get(body.size() - 1);
+    }
+
+    public Node getNeck() {
+        return body.get(body.size() - 2);
     }
 
     public Node getTail() {
