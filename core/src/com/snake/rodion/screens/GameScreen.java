@@ -83,14 +83,21 @@ public class GameScreen extends BaseScreen implements GestureDetector.GestureLis
     @Override
     public void render(float delta) {
         elapsedTime += delta;
-        if (elapsedTime > 0.25f){
+        if (elapsedTime > 0.25f ){
             elapsedTime = 0;
-            world.step();
         }
+        if (elapsedTime == 0)
+            world.step();
         Gdx.gl.glClearColor(0.f, 1.f, 1.f, 1.f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.draw();
 
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+        stage.getViewport().update(width, height);
     }
 
     @Override
@@ -123,12 +130,6 @@ public class GameScreen extends BaseScreen implements GestureDetector.GestureLis
     @Override
     public void hide() {
         super.hide();
-    }
-
-
-    @Override
-    public void resize(int width, int height) {
-        super.resize(width, height);
     }
 
     @Override

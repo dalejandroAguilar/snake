@@ -8,9 +8,11 @@ public class World {
     private Frame frame;
     private Snake snake;
     private Food food;
+    private Direction direction;
 
     public World(ArrayList<Node> initSnakeBody, Frame frame, Node initFoodPosition) {
         this.frame = frame;
+        direction = RIGHT;
         snake = new Snake(initSnakeBody, this, RIGHT);
         food = new Food(initFoodPosition, this);
     }
@@ -40,10 +42,11 @@ public class World {
     }
 
     public void setDirection(Direction direction) {
-        snake.setDirection(direction);
+        this.direction = direction;
     }
 
     public void step(){
+        snake.setDirection(direction);
         snake.step();
     }
 }
