@@ -41,6 +41,8 @@ import static com.snake.rodion.Constants.*;
 import static com.snake.rodion.snakeWorld.Direction.*;
 
 public class GameScreen extends BaseScreen implements GestureDetector.GestureListener {
+
+
     private Stage stage;
     private World world;
     private SnakeEntity snakeEntity;

@@ -13,8 +13,8 @@ public class World {
     public World(ArrayList<Node> initSnakeBody, Frame frame, Node initFoodPosition) {
         this.frame = frame;
         direction = RIGHT;
-        snake = new Snake(initSnakeBody, this, RIGHT);
         food = new Food(initFoodPosition, this);
+        snake = new Snake(initSnakeBody, this, RIGHT);
     }
 
     public Frame getFrame() {
