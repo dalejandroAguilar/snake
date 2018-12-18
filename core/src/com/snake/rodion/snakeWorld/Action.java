@@ -9,15 +9,5 @@ public enum Action {
     CRASH,
     EAT,
     INACTIVE;
-
-    private final int value;
-
-    Action() {
-        this.value = 1 << this.ordinal();
-    }
-
-    public int getValue() {
-        return value;
-    }
 }
 

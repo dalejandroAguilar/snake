@@ -11,8 +11,6 @@ public class Food {
         this.world = world;
     }
 
-
-
     public Node getPosition() {
         return position;
     }

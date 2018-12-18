@@ -2,25 +2,33 @@ package com.snake.rodion.snakeWorld;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.Set;
 
-import static com.snake.rodion.snakeWorld.Action.*;
-import static com.snake.rodion.snakeWorld.Direction.*;
+import static com.snake.rodion.snakeWorld.Action.CRASH;
+import static com.snake.rodion.snakeWorld.Action.EAT;
+import static com.snake.rodion.snakeWorld.Action.INACTIVE;
+import static com.snake.rodion.snakeWorld.Action.MOVE_DOWN;
+import static com.snake.rodion.snakeWorld.Action.MOVE_LEFT;
+import static com.snake.rodion.snakeWorld.Action.MOVE_RIGHT;
+import static com.snake.rodion.snakeWorld.Action.MOVE_UP;
+import static com.snake.rodion.snakeWorld.Direction.ANYWHERE;
+import static com.snake.rodion.snakeWorld.Direction.DOWN;
+import static com.snake.rodion.snakeWorld.Direction.LEFT;
+import static com.snake.rodion.snakeWorld.Direction.RIGHT;
+import static com.snake.rodion.snakeWorld.Direction.UP;
 
 public class Snake {
     private ArrayList<Node> body;
     private World world;
     private boolean vitals;
-    private Set<Action> actions;
+    private Direction direction;
 
     public Snake(ArrayList<Node> body, World world, Direction direction) {
         this.body = body;
         this.world = world;
+        this.direction = direction;
         vitals = true;
-        actions = EnumSet.of(INACTIVE);
-        setDirection(direction);
+        move(direction);
     }
-
 
     public ArrayList<Node> getBody() {
         return body;
@@ -39,58 +47,7 @@ public class Snake {
     }
 
     public Direction getDirection() {
-        if (actions.contains(MOVE_UP)) {
-            return UP;
-        }
-        if (actions.contains(MOVE_DOWN)) {
-            return DOWN;
-        }
-        if (actions.contains(MOVE_LEFT)) {
-            return LEFT;
-        }
-        if (actions.contains(MOVE_RIGHT)) {
-            return RIGHT;
-        }
-        return ANYWHERE;
-    }
-
-    public Set<Action> setDirection(Direction direction) {
-        Node dummyHead = new Node();
-        Node displacement = new Node();
-        Action dummyAction;
-        dummyAction = INACTIVE;
-        //Set action = EnumSet.of(Action.CRASH);
-        switch (direction) {
-            case UP:
-                displacement.setPosition(0, 1);
-                dummyAction = MOVE_UP;
-                break;
-            case DOWN:
-                displacement.setPosition(0, -1);
-                dummyAction = MOVE_DOWN;
-                break;
-            case LEFT:
-                displacement.setPosition(-1, 0);
-                dummyAction = MOVE_LEFT;
-                break;
-            case RIGHT:
-                displacement.setPosition(1, 0);
-                dummyAction = MOVE_RIGHT;
-                break;
-        }
-        dummyHead.setPosition(getHead());
-        dummyHead.increase(displacement);
-        if (!dummyHead.isEqual(getNeck())) {
-            actions = EnumSet.of(INACTIVE);
-            actions.add(dummyAction);
-            if (thereIsNoCollisions(dummyHead)) { // no hay colision
-                if (dummyHead.isEqual(world.getFood().getPosition()))
-                    actions.add(EAT);
-            } else {
-                actions.add(CRASH);
-            }
-        }
-        return actions; //TODO: Sera?
+        return direction;
     }
 
     public Node getHead() {
@@ -149,25 +106,74 @@ public class Snake {
         return ANYWHERE;
     }
 
-    public void step() {
-        if (!actions.contains(CRASH)) {
-            Node dummyHead = new Node();
-            Node displacement = new Node();
-            if (actions.contains(MOVE_UP)) {
+    public void setDirection(Direction direction){
+        this.direction = direction;
+    }
+
+    public Direction move(Direction direction) {
+        Node dummyHead = new Node();
+        Node displacement = new Node();
+        Direction dummyAction;
+        switch (direction) {
+            case UP:
                 displacement.setPosition(0, 1);
-            }
-            if (actions.contains(MOVE_DOWN)) {
+                dummyAction = UP;
+                break;
+            case DOWN:
                 displacement.setPosition(0, -1);
-            }
-            if (actions.contains(MOVE_LEFT)) {
+                dummyAction = DOWN;
+                break;
+            case LEFT:
                 displacement.setPosition(-1, 0);
-            }
-            if (actions.contains(MOVE_RIGHT)) {
+                dummyAction = LEFT;
+                break;
+            case RIGHT:
                 displacement.setPosition(1, 0);
-            }
-            dummyHead.setPosition(getHead());
-            dummyHead.increase(displacement);
-            if (actions.contains(EAT)) {
+                dummyAction = RIGHT;
+                break;
+            default:
+                dummyAction = ANYWHERE;
+        }
+        dummyHead.setPosition(getHead());
+        dummyHead.increase(displacement);
+        if (!dummyHead.isEqual(getNeck()) && (this.direction != direction)) {
+            this.direction = direction;
+            return dummyAction;
+        }
+        return ANYWHERE;
+    }
+
+    public EnumSet<Action> step() {
+        Node dummyHead = new Node();
+        Node displacement = new Node();
+        EnumSet<Action> actions = EnumSet.noneOf(Action.class); //inicializacion
+        Action dummyAction;
+        switch (direction) {
+            case UP:
+                displacement.setPosition(0, 1);
+                dummyAction = MOVE_UP;
+                break;
+            case DOWN:
+                displacement.setPosition(0, -1);
+                dummyAction = MOVE_DOWN;
+                break;
+            case LEFT:
+                displacement.setPosition(-1, 0);
+                dummyAction = MOVE_LEFT;
+                break;
+            case RIGHT:
+                displacement.setPosition(1, 0);
+                dummyAction = MOVE_RIGHT;
+                break;
+            default:
+                dummyAction = INACTIVE;
+        }
+        dummyHead.setPosition(getHead());
+        dummyHead.increase(displacement);
+        if (thereIsNoCollisions(dummyHead)) {
+            actions.add(dummyAction);
+            if (dummyHead.isEqual(world.getFood().getPosition())) {
+                actions.add(EAT);
                 body.add(new Node());
                 getHead().setPosition(dummyHead);
                 world.getFood().setRandomPosition();
@@ -177,8 +183,11 @@ public class Snake {
                 }
                 getHead().setPosition(dummyHead);
             }
-        } else
+        } else {
+            actions.add(CRASH);
             vitals = false;
+        }
+        return actions;
     }
 
     private boolean checkBoundaries(Node node) { // el movimiento se da dentro de las paredes del frame
@@ -208,7 +217,7 @@ public class Snake {
         return true;
     }
 
-    public boolean isVitals() {
+    public boolean getVitals() {
         return vitals;
     }
 

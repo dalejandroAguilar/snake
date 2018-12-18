@@ -4,9 +4,13 @@ import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector2;
 import com.snake.rodion.screens.GameScreen;
 
+import static com.snake.rodion.snakeWorld.Direction.DOWN;
+import static com.snake.rodion.snakeWorld.Direction.LEFT;
+import static com.snake.rodion.snakeWorld.Direction.RIGHT;
+import static com.snake.rodion.snakeWorld.Direction.UP;
+
 public class GameInput implements GestureDetector.GestureListener {
     private GameScreen gameScreen;
-
     public GameInput(GameScreen gameScreen) {
         this.gameScreen = gameScreen;
     }
@@ -28,7 +32,19 @@ public class GameInput implements GestureDetector.GestureListener {
 
     @Override
     public boolean fling(float velocityX, float velocityY, int button) {
-        return false;
+        if (Math.abs(velocityX) > Math.abs(velocityY))
+            if (velocityX > 0)
+                gameScreen.onAction(RIGHT);
+            else
+                gameScreen.onAction(LEFT);
+        else if (Math.abs(velocityX) < Math.abs(velocityY))
+            if (velocityY > 0)
+                gameScreen.onAction(UP);
+            else
+                gameScreen.onAction(DOWN);
+        else
+            return false;
+        return true;
     }
 
     @Override
@@ -53,6 +69,5 @@ public class GameInput implements GestureDetector.GestureListener {
 
     @Override
     public void pinchStop() {
-
     }
 }

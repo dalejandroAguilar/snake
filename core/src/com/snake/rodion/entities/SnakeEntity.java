@@ -10,6 +10,8 @@ import com.snake.rodion.snakeWorld.Direction;
 import com.snake.rodion.snakeWorld.Node;
 import com.snake.rodion.snakeWorld.Snake;
 
+import static com.snake.rodion.Constants.PAD_BOTTOM;
+import static com.snake.rodion.Constants.PAD_LEFT;
 import static com.snake.rodion.Constants.PLANK_CONSTANT;
 
 public class SnakeEntity extends Actor implements Disposable {
@@ -33,7 +35,7 @@ public class SnakeEntity extends Actor implements Disposable {
         float rotation = 0f;
         // head
         rotation = 0f;
-        switch (snake.getDirection()){
+        switch (snake.getWorld().getDirection()){
             case RIGHT:
                 break;
             case UP:
@@ -46,7 +48,7 @@ public class SnakeEntity extends Actor implements Disposable {
                 rotation = 270;
                 break;
         }
-        batch.draw(new TextureRegion(headTexture), snake.getHead().getX() * PLANK_CONSTANT, snake.getHead().getY() * PLANK_CONSTANT, bodyTexture.getWidth() / 2f, bodyTexture.getHeight() / 2f, bodyTexture.getWidth(), bodyTexture.getHeight(), 1, 1, rotation);
+        batch.draw(new TextureRegion(headTexture), snake.getHead().getX() * PLANK_CONSTANT +PAD_LEFT, snake.getHead().getY() * PLANK_CONSTANT +PAD_BOTTOM, bodyTexture.getWidth() / 2f, bodyTexture.getHeight() / 2f, bodyTexture.getWidth(), bodyTexture.getHeight() , 1, 1, rotation);
         // tail
         rotation = 0f;
         switch (snake.getForwardRelativePosition(0)){
@@ -62,7 +64,7 @@ public class SnakeEntity extends Actor implements Disposable {
                 rotation = 270;
                 break;
         }
-        batch.draw(new TextureRegion(tailTexture), snake.getTail().getX() * PLANK_CONSTANT, snake.getTail().getY() * PLANK_CONSTANT, bodyTexture.getWidth() / 2f, bodyTexture.getHeight() / 2f, bodyTexture.getWidth(), bodyTexture.getHeight(), 1, 1, rotation);
+        batch.draw(new TextureRegion(tailTexture), snake.getTail().getX() * PLANK_CONSTANT +PAD_LEFT, snake.getTail().getY() * PLANK_CONSTANT +PAD_BOTTOM, bodyTexture.getWidth() / 2f, bodyTexture.getHeight() / 2f, bodyTexture.getWidth(), bodyTexture.getHeight(), 1, 1, rotation);
         // body
         for (int i = 1; i < snake.getSize() - 1; i++) {
             TextureRegion bodyDummyTexture = new TextureRegion(bodyTexture);
@@ -130,7 +132,7 @@ public class SnakeEntity extends Actor implements Disposable {
             }
 
 
-            batch.draw(bodyDummyTexture, snake.get(i).getX() * PLANK_CONSTANT, snake.get(i).getY() * PLANK_CONSTANT, bodyTexture.getWidth() / 2f, bodyTexture.getHeight() / 2f, bodyTexture.getWidth(), bodyTexture.getHeight(), 1, 1, rotation);
+            batch.draw(bodyDummyTexture, snake.get(i).getX() * PLANK_CONSTANT + PAD_LEFT, snake.get(i).getY() * PLANK_CONSTANT +PAD_BOTTOM, bodyTexture.getWidth() / 2f, bodyTexture.getHeight() / 2f, bodyTexture.getWidth(), bodyTexture.getHeight(), 1, 1, rotation);
         }
     }
 

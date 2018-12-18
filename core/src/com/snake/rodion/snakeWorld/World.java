@@ -1,8 +1,7 @@
 package com.snake.rodion.snakeWorld;
 
 import java.util.ArrayList;
-
-import static com.snake.rodion.snakeWorld.Direction.RIGHT;
+import java.util.EnumSet;
 
 public class World {
     private Frame frame;
@@ -10,11 +9,12 @@ public class World {
     private Food food;
     private Direction direction;
 
-    public World(ArrayList<Node> initSnakeBody, Frame frame, Node initFoodPosition) {
+    public World(ArrayList<Node> initSnakeBody, Frame frame, Node initFoodPosition, Direction direction) {
         this.frame = frame;
-        direction = RIGHT;
+        //this.direction = direction;
         food = new Food(initFoodPosition, this);
-        snake = new Snake(initSnakeBody, this, RIGHT);
+        this.direction = direction;
+        snake = new Snake(initSnakeBody, this, direction);
     }
 
     public Frame getFrame() {
@@ -41,12 +41,22 @@ public class World {
         this.food = food;
     }
 
-    public void setDirection(Direction direction) {
-        this.direction = direction;
+    public Direction move(Direction direction) {
+        //snake.setDirection(direction);
+        return snake.move(direction);
     }
 
-    public void step(){
+    public void setDirection(Direction direction) {
+        this.direction = direction;
         snake.setDirection(direction);
-        snake.step();
+    }
+
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public EnumSet<Action> step() {
+        direction = snake.getDirection();
+        return snake.step();
     }
 }
